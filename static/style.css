@@ -1,0 +1,38 @@
+body{
+    background-color: #fafafa;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+.navbar{
+    background-color: white;
+    border-bottom: 1px solid #dbdbdb;
+}
+.post-card{
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.post-image{
+    max-width: 100%;
+    border-radius: 5px;
+}
+.avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.post-header{
+    display: flex; 
+    align-items: center;
+    margin-bottom: 10px;
+}
+.form-post{
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+}

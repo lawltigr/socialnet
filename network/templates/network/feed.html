@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h2>Feed</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post</button>
+</form>
+<hr>
+{% for post in posts %}
+<div style="margin-bottom: 20px;">
+<strong>{{ post.author.userame }}</strong> <small>{{post.created_at|date:"d.m.Y H:i"}}</small><br>
+<p>{{post.content}}</p>
+{% if post.image %}
+<img src="{{post.image.url}}" width="300">
+{% endif %}
+<!-- <p>❤️ {{ post.likes.count }} likes</p> -->
+<p class="mt-2 text-muted" style="font-size: 14px;">
+    <form action="{% url 'toggle_like' post.id %}">
+        {% csrf_token %}
+        {% if user in post.likes.all %}
+        <button type="submit" style="border: none; background: none; color: red;">❤️</button>
+        {% else %}
+        <button type="submit" style="border: none; background: none; color: gray;">🤍</button>
+        {% endif %}
+        {{ post.likes.count }} likes
+    </form>
+</p>
+</div>
+<div class="mt-2">
+    {% for comment in post.comments.all %}
+    <div style="font-size: 14px;">
+        <strong>{{ comment.author.username }}</strong> {{comment.content}}
+    </div>
+    {% empty %}
+    <small class="text-muted">No comments yet</small>
+    {% endfor %}
+</div>
+<form method="post" class="mt-2">
+    {% csrf_token %}
+    {{comment_form.content}}
+    <input type="hidden" name="post_id" value="{{post.id}}">
+    <button type="submit" name="comment_submit" class="btn btn-sm btn-outline-primary mt-1">Comment</button>
+</form>
+
+{% endfor %}
+{% endblock %}
