@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
 from .models import Post
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
@@ -55,5 +56,26 @@ def toggle_like(request, post_id):
         post.likes.add(request.user)
 
     return HttpResponseRedirect(reverse('feed'))
+
+
+@login_required
+def profile_view(request, username):
+    user_profile = get_object_or_404(User, username=username)
+    profile= user_profile.profile
+    posts= user_profile.post_set.all().order_by('-created_at')
+    is_following = request.user in profile.followers.all()
+
+    if request.method == 'POST':
+        if is_following:
+            profile.followers.remove(request.user)
+        else: 
+            profile.followers.add(request.user)
+        return redirect('profile', username=username)
+    return render(request, 'network/profile.html', {
+        'profile_user': user_profile,
+        'profile': profile,
+        'posts': posts,
+        'is_following': is_following,
+    })
 # Create your views here.
 

@@ -12,6 +12,10 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
+    def posts(self):
+        return self.user.post_set.all()
+    
+    
 class Post(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     content=models.TextField()
