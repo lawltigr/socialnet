@@ -11,7 +11,11 @@
 {% for post in posts %}
 <div style="margin-bottom: 20px;">
 <strong>{{ post.author.userame }}</strong> <small>{{post.created_at|date:"d.m.Y H:i"}}</small><br>
-<p>{{post.content}}</p>
+<p>
+    <a href="{% url 'profile' post.author.username %}">
+        <strong>{{ post.author.username }}</strong>
+    </a>: {{post.content}}
+</p>
 {% if post.image %}
 <img src="{{post.image.url}}" width="300">
 {% endif %}

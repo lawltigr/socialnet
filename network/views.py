@@ -7,6 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .forms import EditProfileForm
+from django.contrib.auth.models import User
 
 @login_required
 def feed(request):
@@ -77,5 +79,17 @@ def profile_view(request, username):
         'posts': posts,
         'is_following': is_following,
     })
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', username=request.user.username)
+    else:
+        form = EditProfileForm(instance=profile)
+    return render(request, 'network/edit_profile.html', {'form': form})
 # Create your views here.
 

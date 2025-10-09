@@ -7,6 +7,9 @@
         {%else%}
         <img src="media/baseavatar.jpg" class="rounded-circle">
         {% endif %}
+        {% if profile_user == user %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-secondary btn-sm">Edit Profile</a>
+        {% endif %}
         <div class="ms-3">
             <h4>{{ profile.username }}</h4>
             <p class="text-muted">{{ profile.bio }}</p>
