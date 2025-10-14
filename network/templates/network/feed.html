@@ -35,7 +35,12 @@
 <div class="mt-2">
     {% for comment in post.comments.all %}
     <div style="font-size: 14px;">
-        <strong>{{ comment.author.username }}</strong> {{comment.content}}
+        <p>
+            {{comment.content}}
+            {% if comment.author == user %}
+            <a href="{% url 'edit_comment' comment.id %}" class="btn btn-link btn-sm">Edit</a>
+            {% endif %}
+        </p> 
     </div>
     {% empty %}
     <small class="text-muted">No comments yet</small>

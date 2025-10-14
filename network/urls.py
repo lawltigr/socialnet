@@ -9,4 +9,5 @@ urlpatterns = [
     path('like/<int:post_id>/', views.toggle_like, name='toggle_like'),
     path('profile/<str:username>/', views.profile_view, name='profile'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
+    path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
 ]
