@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-4">
+        <h4>Delete post?</h4>
+        <p>{{post.content}}</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a href="{% url 'feed' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

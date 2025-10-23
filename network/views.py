@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Post, Comment
+from .models import Post, Comment, Profile
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 from .forms import EditProfileForm
 from django.contrib.auth.models import User
@@ -105,3 +105,22 @@ def edit_comment(request, comment_id):
     else:
         form = CommentForm(instance=comment)
     return render(request, 'network/edit_comment.html', {'form': form})
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.author != request.user:
+        return HttpResponseForbidden("You are not allowed to deleter this post.")
+    if request.method == 'POST':
+        post.delete()
+        return redirect('feed')
+    return render(request, 'network/confirm_delete.html', {'post: post'})
+
+def follow_toggle(request, username):
+    target_user = get_object_or_404(User, username=username)
+    target_profile = get_object_or_404(Profile, user=target_user)
+    current_profile = request.user.profile
+    if request.user in target_profile.followers.all():
+        target_profile.followers.remove(request.user)
+    else:
+        target_profile.followers.add(request.user)
+    return redirect('profile', username=username)
