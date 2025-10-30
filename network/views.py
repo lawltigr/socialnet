@@ -105,6 +105,7 @@ def edit_comment(request, comment_id):
     else:
         form = CommentForm(instance=comment)
     return render(request, 'network/edit_comment.html', {'form': form})
+
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -115,6 +116,20 @@ def delete_post(request, post_id):
         return redirect('feed')
     return render(request, 'network/confirm_delete.html', {'post: post'})
 
+@login_required
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user!= post.author:
+        return redirect('feed')
+    if request.method =='POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('feed')
+    else:
+        form=PostForm(instance=post)
+        return render(request, 'network/edit_post.html', {'form': form, 'post': post})
+
 def follow_toggle(request, username):
     target_user = get_object_or_404(User, username=username)
     target_profile = get_object_or_404(Profile, user=target_user)
@@ -124,3 +139,4 @@ def follow_toggle(request, username):
     else:
         target_profile.followers.add(request.user)
     return redirect('profile', username=username)
+

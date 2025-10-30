@@ -14,6 +14,7 @@ urlpatterns = [
     path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
     path('post/<int:post_id>/delete/', views.delete_post, name='delete_post'),
     path('follow/<str:username>/', views.follow_toggle, name='follow_toggle'),
+    path('post/<int:post_id>/edit/', views.edit_post, name='edit_post'),
 ]
 
 if settings.DEBUG:
