@@ -6,13 +6,13 @@ body{
     background-color: white;
     border-bottom: 1px solid #dbdbdb;
 }
-.post-card{
+/* .post-card{
     background-color: white;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 20px;
-}
+} */
 .post-image{
     max-width: 100%;
     border-radius: 5px;
