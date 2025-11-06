@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Post, Comment, Profile
+from .models import Post, Comment, Profile, Message
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -140,3 +140,29 @@ def follow_toggle(request, username):
         target_profile.followers.add(request.user)
     return redirect('profile', username=username)
 
+@login_required
+def inbox(request):
+    users = User.objects.exclude(id=request.user.id)
+    return render(request, 'messages/inbox.html', {'users': users})
+@login_required
+def chat_view(request, username):
+    other_user = get_object_or_404(User, username=username)
+    messages = Message.objects.filter(
+        sender__in=[request.user, other_user],
+        recipient__in=[request.user, other_user]
+    ).order_by('timestamp')
+
+    Message.objects.filter(sender=other_user, recipient=request.user, is_read=False).update(is_read=True)
+    return render(request, 'messages/chat.html', {
+        'other_user': other_user,
+        'messages': messages
+    })
+
+@login_required
+def send_message(request, username):
+    if request.method== 'POST':
+        recipient = get_object_or_404(User, username=username)
+        content = request.POST.get('content')
+        if content:
+            Message.objects.create(sender=request.user, recipient=recipient, content=content)
+        return redirect('chat', username=username)

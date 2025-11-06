@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <h3 class="mb-4">Your Inbox</h3>
+    <ul class="list-group">
+        {% for user in users %}
+        <li class="list-group-item bg-dark text-light">
+            <a href="{% url 'chat' user.username %}" class="text-info">{{user.username}}</a>
+        </li>
+        {% empty %}
+        <li class="list-group-item">No other users found.</li>
+        {% endfor %}
+    </ul>
+</div>

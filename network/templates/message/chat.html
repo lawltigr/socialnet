@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+    <h4 class="mb-3">Chat with {{other_user.username}}</h4>
+    <div class="bg-dark p-3 rounded mb-3" style="height: 400px; overflow-y: auto;">
+        {% for message in messages %}
+        <div class="mb-2 {% if message.sender == user %}text-end{% endif %}">
+            <span class="d-block fw-bold" style="font-size: 14px;">{{message.sender.username}}</span>
+            <span>{{message.content}}</span><br>
+            <small class="text-muted">{{message.timestamp|date:"H:i d.m.Y"}}</small>
+        </div>
+        {% endfor %}
+    </div>
+    <form action="{% ur 'send_message' other_user.username %}">
+        {% csrf.token %}
+        <div class="input-group">
+            <input type="text" name="content" class="form-control" placeholder="Type a message..." required>
+            <button class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

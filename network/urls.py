@@ -15,6 +15,10 @@ urlpatterns = [
     path('post/<int:post_id>/delete/', views.delete_post, name='delete_post'),
     path('follow/<str:username>/', views.follow_toggle, name='follow_toggle'),
     path('post/<int:post_id>/edit/', views.edit_post, name='edit_post'),
+
+    path('messages/', views.inbox, name='inbox'),
+    path('messages/<str:username>/', views.chat_view, name='chat'),
+    path('messages/<str:username>/send/', views.send_message_view, name='send_message'),
 ]
 
 if settings.DEBUG:
