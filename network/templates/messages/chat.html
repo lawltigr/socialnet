@@ -9,11 +9,12 @@
             {% if message.content %}
                 <span>{{message.content}}</span><br>
             {% endif %}
-            {% if message.image %}
-                <img src="{{ message.image.url }}" style="max-width: 200px; border-radius: 6px;"><br>
-            {% endif %}
+            
             <small class="text-muted">{{message.timestamp|date:"H:i d.m.Y"}}</small>
         </div>
+        {% if message.image %}
+            <img src="{{ message.image.url }}" style="max-width: 200px; border-radius: 6px;"><br>
+        {% endif %}
         {% endfor %}
     </div>
     <form action="{% url 'send_message' other_user.username %}" method="post" enctype="multipart/form-data">
