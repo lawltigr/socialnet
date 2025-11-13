@@ -27,6 +27,7 @@
                 <button class="btn btn-primary btn-sm">Follow</button>
                 {% endif %}
             </form>
+            <a href="{% url 'chat' profile_user.username%}" class="btn btn-outline-light btn-sm">Message</a>
             {% endif %}
         </div>
     </div>

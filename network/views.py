@@ -163,6 +163,7 @@ def send_message(request, username):
     if request.method== 'POST':
         recipient = get_object_or_404(User, username=username)
         content = request.POST.get('content')
-        if content:
-            Message.objects.create(sender=request.user, recipient=recipient, content=content)
-        return redirect('chat', username=username)
+        image = request.FILES.get('image')
+        if content or image:
+            Message.objects.create(sender=request.user, recipient=recipient, content=content, image=image)
+    return redirect('chat', username=username)

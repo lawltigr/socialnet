@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post, Comment
+from .models import Post, Comment, Message
 from .models import Profile
 
 class PostForm(forms.ModelForm):
@@ -19,6 +19,17 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Add a comment...',
                 'class': 'form-control'
             })
+        }
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content', 'image']
+        widgets = {
+            'content': forms.TextInput(attrs={
+                'placeholder': 'Type a Message...',
+                'class': 'form-control'
+            }),
         }
 
 class EditProfileForm(forms.ModelForm):
