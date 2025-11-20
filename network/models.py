@@ -48,3 +48,20 @@ class Message(models.Model):
         ordering = ['timestamp']
     def __str__(self):
         return f"{self.sender} --> {self.recipient}: {self.content[:20]}"
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('like', 'Like'),
+        ('comment', 'Comment'),
+        ('message', 'Message'),
+        ('follow', 'Follow'),
+    ]
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user_notifications', null=True, blank=True)
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, null=True, blank=True)
+    comment = models.ForeignKey('Comment', on_delete=models.CASCADE, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    def __str__(self):
+        return f"{self.from_user} --> {self.to_user} [{self.notification_type}]"

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Post, Comment, Profile, Message
+from .models import Post, Comment, Profile, Message, Notification
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -56,6 +56,12 @@ def toggle_like(request, post_id):
         post.likes.remove(request.user)
     else: 
         post.likes.add(request.user)
+        Notification.objects.create(
+            to_user=post.author,
+            from_user=user,
+            notification_type='like',
+            post=post
+        )
 
     return HttpResponseRedirect(reverse('feed'))
 
