@@ -15,9 +15,13 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-link p-0 m-0 align-baseline" style="text-decoration: underline; color: rgb(83, 155, 161);">Log out</button>
     </form>
+    
     {% else %}
         <p><a href="{% url 'login' %}" style="text-decoration: underline; color: rgb(83, 155, 161);">Login</a> | <a href="{% url 'signup' %}" style="text-decoration: underline; color: rgb(83, 155, 161);">Sign up</a></p>
     {% endif %}
+    
+    <p style="margin-bottom: 0px; text-align: right;"><a href="{% url 'inbox' %}" style="text-decoration: underline; color: rgb(83, 155, 161);">Inbox</a></p>
+    <p style="margin-bottom: 5px; text-align: right;"><a href="{% url 'feed' %}" style="text-decoration: underline; color: rgb(83, 155, 161);">Feed</a></p>
 
 
     <hr>

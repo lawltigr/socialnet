@@ -58,7 +58,7 @@ def toggle_like(request, post_id):
         post.likes.add(request.user)
         Notification.objects.create(
             to_user=post.author,
-            from_user=user,
+            from_user=request.user,
             notification_type='like',
             post=post
         )
@@ -173,3 +173,8 @@ def send_message(request, username):
         if content or image:
             Message.objects.create(sender=request.user, recipient=recipient, content=content, image=image)
     return redirect('chat', username=username)
+
+@login_required 
+def notifications_view(request):
+    notifs = request.user.notifications.all().order_by('-created_at')
+    return render(request, 'network/notifications.html', {'notifications': notifs})

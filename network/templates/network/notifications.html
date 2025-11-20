@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Notifications</h3>
+    <ul class="list-group">
+        {% for notif in notifications %}
+            <li class="list-group-item">
+                {% if notif.notification_type == 'like' %}
+                    {{ notif.from_user_username }} liked your post.
+                {% elif notif.notification_type == 'comment' %}
+                    {{ notif.from_user_username }} commented on your post.
+                {% elif notif.notification_type == 'message' %}
+                    New message from {{ notif.from_user_username }}.
+                {% elif notif.notification_type == 'follow' %}
+                    {{ notif.from_user_username }} followed you.
+                {% endif %}
+                <br><small class="text-muted">{{ notif.created_at|date:"d.m.Y H:i" }}</small>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No notifications</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
