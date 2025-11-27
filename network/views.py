@@ -15,6 +15,7 @@ def feed(request):
     posts = Post.objects.all().order_by('-created_at')
     post_form = PostForm()
     comment_form = CommentForm()
+    notif_count = request.user.notifications.filter(is_read=False).count()
 
     if request.method=='POST': # 2
         if 'post_submit' in request.POST:
@@ -37,7 +38,8 @@ def feed(request):
                 return redirect('feed')
             
 
-    return render(request, 'network/feed.html', {'posts': posts, 'form': post_form, 'comment_form': comment_form})
+    return render(request, 'network/feed.html', {'posts': posts, 'form': post_form, 'comment_form': comment_form, 'notif_count': notif_count})
+
     
 def signup(request):
     if request.method == 'POST':
@@ -177,4 +179,5 @@ def send_message(request, username):
 @login_required 
 def notifications_view(request):
     notifs = request.user.notifications.all().order_by('-created_at')
+    notifs.update(is_read=True)
     return render(request, 'network/notifications.html', {'notifications': notifs})

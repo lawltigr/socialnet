@@ -9,8 +9,18 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body style="padding: 5px 30px; color: rgb(60, 104, 111); " class="bg-dark text-light">
+    <nav>
+
+    </nav>
     {% if user.is_authenticated %}
         <!-- <p>You are logged in as {{user.username}} | <a href="{% url 'logout' %}">Log out</a></p> -->
+        <p style="margin-bottom: 0px; text-align: right;">
+            <a href="{% url 'notification' %}" style="position: relative; text-decoration: none; color: rgb(83, 155, 161); font-size: 20px;">🔔
+                {% if notif_count>0 %}
+                    <span style="position: absolute; top: -10px; right: -10px; background-color: red; color: white; border-radius: 50%; font-size: 12px; padding: 2px 6px;">{{ notif_count }}</span>
+                {% endif %}
+            </a>
+        </p>
         <form action="{% url 'logout' %}" method="post" style="display: inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-link p-0 m-0 align-baseline" style="text-decoration: underline; color: rgb(83, 155, 161);">Log out</button>
