@@ -15,8 +15,8 @@
     {% if user.is_authenticated %}
         <!-- <p>You are logged in as {{user.username}} | <a href="{% url 'logout' %}">Log out</a></p> -->
         <p style="margin-bottom: 0px; text-align: right;">
-            <a href="{% url 'notification' %}" style="position: relative; text-decoration: none; color: rgb(83, 155, 161); font-size: 20px;">🔔
-                {% if notif_count>0 %}
+            <a href="{% url 'notifications' %}" style="position: relative; text-decoration: none; color: rgb(83, 155, 161); font-size: 20px;">🔔
+                {% if notif_count %}
                     <span style="position: absolute; top: -10px; right: -10px; background-color: red; color: white; border-radius: 50%; font-size: 12px; padding: 2px 6px;">{{ notif_count }}</span>
                 {% endif %}
             </a>

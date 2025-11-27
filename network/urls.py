@@ -19,6 +19,7 @@ urlpatterns = [
     path('messages/', views.inbox, name='inbox'),
     path('messages/<str:username>/', views.chat_view, name='chat'),
     path('messages/<str:username>/send/', views.send_message, name='send_message'),
+    path('notifications/', views.notifications_view, name='notifications'),
 ]
 
 if settings.DEBUG:

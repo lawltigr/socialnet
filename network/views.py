@@ -178,6 +178,6 @@ def send_message(request, username):
 
 @login_required 
 def notifications_view(request):
-    notifs = request.user.notifications.all().order_by('-created_at')
+    notifs = request.user.notifications.all().order_by('-timestamp')
     notifs.update(is_read=True)
     return render(request, 'network/notifications.html', {'notifications': notifs})
