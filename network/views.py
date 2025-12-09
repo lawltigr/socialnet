@@ -181,3 +181,15 @@ def notifications_view(request):
     notifs = request.user.notifications.all().order_by('-timestamp')
     notifs.update(is_read=True)
     return render(request, 'network/notifications.html', {'notifications': notifs})
+
+@login_required
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = post.comments.all().order_by('-created_at')
+    comment_form = CommentForm()
+
+    return render(request, 'network/post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form
+    })
