@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.contrib import messages
 from .models import Post, Comment, Profile, Message, Notification
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
@@ -35,6 +35,14 @@ def feed(request):
                 comment.post = post
                 comment.author = request.user
                 comment.save()
+                Notification.objects.create(
+                    to_user = post.author,
+                    from_user = request.user, 
+                    notification_type = 'comment',
+                    post = post,
+                    comment = comment
+                )
+                messages.success(request, "Your comment was added!")
                 return redirect('feed')
             
 
@@ -56,6 +64,7 @@ def toggle_like(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.user in post.likes.all():
         post.likes.remove(request.user)
+        messages.info(request, "You unliked the post.")
     else: 
         post.likes.add(request.user)
         Notification.objects.create(
@@ -64,6 +73,7 @@ def toggle_like(request, post_id):
             notification_type='like',
             post=post
         )
+        messages.success(request, "You liked the post.")
 
     return HttpResponseRedirect(reverse('feed'))
 
@@ -120,9 +130,10 @@ def delete_post(request, post_id):
     if post.author != request.user:
         return HttpResponseForbidden("You are not allowed to deleter this post.")
     if request.method == 'POST':
+        Notification.objects.filter(post=post).delete()
         post.delete()
         return redirect('feed')
-    return render(request, 'network/confirm_delete.html', {'post: post'})
+    return render(request, 'network/confirm_delete.html', {'post': post})
 
 @login_required
 def edit_post(request, post_id):
@@ -146,6 +157,12 @@ def follow_toggle(request, username):
         target_profile.followers.remove(request.user)
     else:
         target_profile.followers.add(request.user)
+        Notification.objects.create(
+            to_user = target_user,
+            from_user = request.user,
+            notification_type = 'follow'
+        )
+        messages.success(request, f"You followed {target_user.username}.")
     return redirect('profile', username=username)
 
 @login_required
@@ -174,6 +191,12 @@ def send_message(request, username):
         image = request.FILES.get('image')
         if content or image:
             Message.objects.create(sender=request.user, recipient=recipient, content=content, image=image)
+            Notification.objects.create(
+                to_user = recipient,
+                from_user = request.user,
+                notification_type = 'message'
+            )
+            messages.success(request, f"Message sent to {recipient.username}!")
     return redirect('chat', username=username)
 
 @login_required 

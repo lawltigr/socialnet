@@ -6,13 +6,13 @@
         {% for notif in notifications %}
             <li class="list-group-item">
                 {% if notif.notification_type == 'like' %}
-                    <a href="{% url 'post_detail' notif.post.id %}"><strong>{{ notif.from_user.username }} liked your post.</strong></a>
+                    <a href="{% url 'post_detail' notif.post.id %}" style="color: rgb(83, 155, 161);"><strong>{{ notif.from_user.username }} liked your post.</strong></a>
                 {% elif notif.notification_type == 'comment' %}
-                    <a href="{% url 'post_detail' notif.post.id %}"><strong>{{ notif.from_user.username }} commented on your post.</strong></a>
+                    <a href="{% url 'post_detail' notif.post.id %}" style="color: rgb(83, 155, 161);"><strong>{{ notif.from_user.username }} commented on your post.</strong></a>
                 {% elif notif.notification_type == 'message' %}
-                    <a href="{% url 'chat' notif.from_user.username %}"><strong>New message from {{ notif.from_user.username }}.</strong></a>
+                    <a href="{% url 'chat' notif.from_user.username %}" style="color: rgb(83, 155, 161);"><strong>New message from {{ notif.from_user.username }}.</strong></a>
                 {% elif notif.notification_type == 'follow' %}
-                    <a href="{% url 'profile' notif.from_user.username %}"><strong>{{ notif.from_user.username }} followed you.</strong></a>
+                    <a href="{% url 'profile' notif.from_user.username %}" style="color: rgb(83, 155, 161);"><strong>{{ notif.from_user.username }} followed you.</strong></a>
                 {% endif %}
                 <br><small class="text-muted">{{ notif.created_at|date:"d.m.Y H:i" }}</small>
             </li>
