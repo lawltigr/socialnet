@@ -125,6 +125,18 @@ def edit_comment(request, comment_id):
     return render(request, 'network/edit_comment.html', {'form': form})
 
 @login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if comment.author != request.user:
+        return HttpResponseForbidden("You cannot delete this comment.")
+    if request.method == 'POST':
+        Notification.objects.filter(comment=comment).delete()
+        comment.delete()
+        messages.success(request, "Comment deleted.")
+        return redirect('feed')
+    return render(request, 'network/confirm_delete_comment.html', {'comment': comment})
+
+@login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if post.author != request.user:
