@@ -56,6 +56,7 @@
                     </a>: {{comment.content}}
                     {% if comment.author == user %}
                     <a href="{% url 'edit_comment' comment.id %}" class="btn btn-link btn-sm">Edit</a>
+                    <a href="{% url 'delete_comment' comment.id %}" class="btn btn-link btn-sm text-danger">Delete</a>
                     {% endif %}
                 </p> 
             </div>
