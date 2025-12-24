@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Post, Comment, Profile, Message, Notification
+from .models import Post, Comment, Profile, Message, Notification, SavedPost
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -134,7 +134,7 @@ def delete_comment(request, comment_id):
         comment.delete()
         messages.success(request, "Comment deleted.")
         return redirect('feed')
-    return render(request, 'network/confirm_delete_comment.html', {'comment': comment})
+    return render(request)
 
 @login_required
 def delete_post(request, post_id):
@@ -228,3 +228,19 @@ def post_detail(request, post_id):
         'comments': comments,
         'comment_form': comment_form
     })
+
+@login_required
+def toggle_save(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    saved_post, created = SavedPost.objects.get_or_create(user=request.user, post=post)
+    if not created:
+        saved_post.delete()
+        messages.success(request, "Post removed from saved.")
+    else:
+        messages.success(request, "Post saved!")
+    return redirect('feed')
+
+@login_required
+def saved_posts_view(request):
+    saved = SavedPost.objects.filter(user=request.user).order_by('-saved_at')
+    return render(request, 'network/saved_posts.html', {'saved_posts': saved})

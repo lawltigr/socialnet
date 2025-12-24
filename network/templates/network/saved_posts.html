@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3>Saved Posts</h3>
+    <div class="container mt-4" style="max-width: 600px;">
+        {% for saved in saved_posts %}
+            <div class="card p-3 mb-3">
+                <p><strong>{{ saved.post.author.username }}</strong>- {{ saved.post.created_at|date:"d.m.Y H:i" }}</p>
+                <p>{{ saved.post.content }}</p>
+            </div>
+    </div>
