@@ -1,10 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h3>Saved Posts</h3>
+    <h3>Saved Posts by {{ saved_user.username }}</h3>
     <div class="container mt-4" style="max-width: 600px;">
-        {% for saved in saved_posts %}
+        <!-- {% for saved in saved_posts %}
             <div class="card p-3 mb-3">
-                <p><strong>{{ saved.post.author.username }}</strong>- {{ saved.post.created_at|date:"d.m.Y H:i" }}</p>
-                <p>{{ saved.post.content }}</p>
+                <p style="color: white;"><strong style="color: rgb(83, 155, 161);">{{ saved.post.author.username }}</strong> - {{ saved.post.created_at|date:"d.m.Y H:i" }}</p>
+                <p class="mb-1" style="color: white;">{{ saved.post.content }}</p>
+                {% if saved.post.image %}
+                    <img src="{{ saved.post.image.url }}" class="img-fluid">
+                {% endif %}
             </div>
+            {% empty %}
+                <p class="text-muted" style="color: rgb(83, 155, 161);">No saved posts.</p>
+        {% endfor %} -->
+        {% for post in posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p>{{ post.content }}</p>
+                    <small class="text-muted">By {{ post.author.username }} | {{ post.created_at|date: "d.m.Y H:i" }}</small>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No saved posts.</p>
+        {% endfor %}
     </div>
+{% endblock %}

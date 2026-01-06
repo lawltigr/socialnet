@@ -16,6 +16,7 @@ def feed(request):
     post_form = PostForm()
     comment_form = CommentForm()
     notif_count = request.user.notifications.filter(is_read=False).count()
+    saved_post_ids = request.user.saved_posts.values_list('post_id', flat=True)
 
     if request.method=='POST': # 2
         if 'post_submit' in request.POST:
@@ -46,7 +47,7 @@ def feed(request):
                 return redirect('feed')
             
 
-    return render(request, 'network/feed.html', {'posts': posts, 'form': post_form, 'comment_form': comment_form, 'notif_count': notif_count})
+    return render(request, 'network/feed.html', {'posts': posts, 'form': post_form, 'comment_form': comment_form, 'notif_count': notif_count, 'saved_post_ids': saved_post_ids})
 
     
 def signup(request):
@@ -84,6 +85,7 @@ def profile_view(request, username):
     profile= user_profile.profile
     posts= user_profile.post_set.all().order_by('-created_at')
     is_following = request.user in profile.followers.all()
+    saved_count = user_profile.saved_posts.count()
 
     if request.method == 'POST':
         if is_following:
@@ -96,6 +98,7 @@ def profile_view(request, username):
         'profile': profile,
         'posts': posts,
         'is_following': is_following,
+        'saved_count': saved_count,
     })
 
 @login_required
@@ -241,6 +244,10 @@ def toggle_save(request, post_id):
     return redirect('feed')
 
 @login_required
-def saved_posts_view(request):
-    saved = SavedPost.objects.filter(user=request.user).order_by('-saved_at')
-    return render(request, 'network/saved_posts.html', {'saved_posts': saved})
+def saved_posts_view(request, username):
+    user = get_object_or_404(User, username=username)
+    saved_post_ids = user.saved_posts.values_list('post_id', flat=True)
+    posts = Post.objects.filter(id__in=saved_post_ids).order_by('-created_at')
+    return render(request, 'network/saved_posts.html', {'saved_user': user, 'posts': posts})
+
+

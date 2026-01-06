@@ -19,6 +19,7 @@ urlpatterns = [
     path('post/<int:post_id>/', views.post_detail, name='post_detail'),
     path('save/<int:post_id>/', views.toggle_save, name='toggle_save'),
     path('saved/', views.saved_posts_view, name='saved_posts'),
+    path('saved/<str:username>/', views.saved_posts_view, name='saved_posts'),
 
     path('messages/', views.inbox, name='inbox'),
     path('messages/<str:username>/', views.chat_view, name='chat'),

@@ -48,10 +48,10 @@
         </form>
         <form action="{% url 'toggle_save' post.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-            {% if post in request.user.saved_posts.values_list('post', flat=True) %}
-                <button type="submit" class="btn btn-sm btn0outline-warning">Unsave</button>
+            {% if post.id in saved_post_ids %}
+                <button type="submit" class="btn btn-sm btn-outline-warning">Unsave</button>
             {% else %}
-                <button type="submit" class="btn btn-sm btn0outline-light">Save</button>
+                <button type="submit" class="btn btn-sm btn-outline-light">Save</button>
             {% endif %}
         </form>
 

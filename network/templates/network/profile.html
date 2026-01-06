@@ -43,5 +43,8 @@
     {% empty %}
     <p>No posts yet</p>
     {% endfor %}
+
+    <p><strong>Saved posts:</strong> {{ saved_count }}</p>
+    <a href="{% url 'saved_posts' username=profile_user.username %}">View Saved Posts</a>
 </div>
 {% endblock %}
