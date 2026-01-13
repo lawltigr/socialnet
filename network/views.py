@@ -244,8 +244,9 @@ def toggle_save(request, post_id):
     return redirect('feed')
 
 @login_required
-def saved_posts_view(request, username):
-    user = get_object_or_404(User, username=username)
+def saved_posts_view(request):
+    # user = get_object_or_404(User, username=username)
+    user = request.user
     saved_post_ids = user.saved_posts.values_list('post_id', flat=True)
     posts = Post.objects.filter(id__in=saved_post_ids).order_by('-created_at')
     return render(request, 'network/saved_posts.html', {'saved_user': user, 'posts': posts})

@@ -16,12 +16,17 @@
         {% for post in posts %}
             <div class="card mb-3">
                 <div class="card-body">
-                    <p>{{ post.content }}</p>
-                    <small class="text-muted">By {{ post.author.username }} | {{ post.created_at|date: "d.m.Y H:i" }}</small>
+                    <p style="color: rgb(223, 223, 223);">{{ post.content }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="img-fluid">
+                    {% endif %}
+                    <br>
+                    <small style="color: rgb(107, 134, 135);">By {{ post.author.username }} | {{ post.created_at|date:"d.m.Y H:i" }}</small>
                 </div>
             </div>
             {% empty %}
             <p class="text-muted">No saved posts.</p>
         {% endfor %}
+        <p><strong><a href="{% url 'saved_posts' %}">Saved posts:</a></strong> {{ saved_count }}</p>
     </div>
 {% endblock %}
