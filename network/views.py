@@ -249,6 +249,7 @@ def saved_posts_view(request):
     user = request.user
     saved_post_ids = user.saved_posts.values_list('post_id', flat=True)
     posts = Post.objects.filter(id__in=saved_post_ids).order_by('-created_at')
-    return render(request, 'network/saved_posts.html', {'saved_user': user, 'posts': posts})
+    saved_count = user.saved_posts.count()
+    return render(request, 'network/saved_posts.html', {'saved_user': user, 'posts': posts, 'saved_count': saved_count,})
 
 
