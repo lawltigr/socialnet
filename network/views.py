@@ -225,11 +225,13 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.all().order_by('-created_at')
     comment_form = CommentForm()
+    saved_post_ids = request.user.saved_posts.values_list('post_id', flat=True)
 
     return render(request, 'network/post_detail.html', {
         'post': post,
         'comments': comments,
-        'comment_form': comment_form
+        'comment_form': comment_form,
+        'saved_post_ids': saved_post_ids,
     })
 
 @login_required

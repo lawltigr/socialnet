@@ -21,4 +21,12 @@
         {{ comment_form.as_p }}
         <button type="submit" class="btn btn-primary">Add Comment</button>
     </form>
+    <form action="{% url 'toggle_save' post.id %}" method="POST">
+        {% csrf_token %}
+        {% if post.id in saved_post_ids %}
+        <button type="submit" class="btn btn-sm btn-warning">Unsave</button>
+        {% else %}
+        <button type="submit" class="btn btn-sm btn-outline-warning">Save</button>
+        {% endif %}
+    </form>
 {% endblock %}
