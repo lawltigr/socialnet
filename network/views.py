@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Post, Comment, Profile, Message, Notification, SavedPost
@@ -243,6 +244,11 @@ def toggle_save(request, post_id):
         messages.success(request, "Post removed from saved.")
     else:
         messages.success(request, "Post saved!")
+
+    # redirect back where the user came from
+    next_url = request.META.get('HTTP_REFERER')
+    if next_url and urlparse(next_url).path != request.path:
+        return redirect(next_url)
     return redirect('feed')
 
 @login_required

@@ -24,6 +24,10 @@
                     <small style="color: rgb(107, 134, 135);">By {{ post.author.username }} | {{ post.created_at|date:"d.m.Y H:i" }}</small>
                 </div>
             </div>
+            <form action="{% url 'toggle_save' post.id %}" method="post" class="mt-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Unsave</button>
+            </form>
             {% empty %}
             <p class="text-muted">No saved posts.</p>
         {% endfor %}
