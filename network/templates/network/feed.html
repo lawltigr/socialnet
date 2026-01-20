@@ -55,7 +55,7 @@
             {% endif %}
         </form>
 
-        <div class="mt-2">
+        <!-- <div class="mt-2">
             {% for comment in post.comments.all %}
             <div style="font-size: 14px;">
                 <p>
@@ -93,6 +93,51 @@
             </div>
             {% empty %}
             <small class="text-muted">No comments yet</small>
+            {% endfor %}
+        </div> -->
+
+        <div class="mt-2">
+            {% for comment in post.comments.all %}
+                {% if not comment.parent %}
+                <div style="font-size: 14px; margin-bottom: 8px;">
+                    <p>
+                        <a href="{% url 'profile' comment.author.username %}" style="color: rgb(83, 155, 161);">
+                            <strong>{{ comment.author.username }}</strong>
+                        </a>: {{ comment.content }}
+                        {% if comment.author == user %}
+                            <a href="{% url 'edit_comment' comment.id %}" class="btn btn-link btn-sm">Edit</a>
+        
+                        {% endif %}
+                        <button class="btn btn-link btn-sm text-info" type="button" data-bs-toggle="collapse" data-bs-target="#replyForm{{ comment.id }}">Reply</button>
+                    </p>
+                    <div class="collapse" id="replyForm{{ comment.id }}">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ comment_form.content }}
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                            <button type="submit" name="reply_submit" class="btn btn-sm btn-outline-info mt-1">Reply</button>
+                        </form>
+                    </div>
+        
+                    
+                    {% for reply in comment.replies.all %}
+                        <div style="margin-left: 30px; font-size: 13px;">
+                            <p>
+                                <a href="{% url 'profile' reply.author.username %}" style="color: rgb(120, 200, 200);">
+                                    <strong>{{ reply.author.username }}</strong>
+                                </a>: {{ reply.content }}
+                                {% if reply.author == user %}
+                                    <a href="{% url 'edit_comment' reply.id %}" class="btn btn-link btn-sm">Edit</a>
+        
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% empty %}
+                <small class="text-muted">No comments yet</small>
             {% endfor %}
         </div>
 
