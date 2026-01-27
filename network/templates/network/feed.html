@@ -134,6 +134,13 @@
                             </p>
                         </div>
                     {% endfor %}
+                    <form method="post" style="display: none;" class="reply-form mt-2" id="reply-form-{{ comment.id }}">
+                        {%csrf_token%}
+                        {{comment_form.content}}
+                        <input type="hidden" name="post_id" value="{{post.id}}">
+                        <input type="hidden" name="reply_to" value="{{comment.id}}">
+                        <button type="submit" name="comment_submit" class="btn btn-sm btn-outline-info">Reply</button>
+                    </form>
                 </div>
                 {% endif %}
             {% empty %}
