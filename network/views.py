@@ -28,10 +28,10 @@ def feed(request):
                 new_post.save()
                 return redirect('feed')
             
-        elif 'comment_submit' in request.POST:
+        elif 'reply_submit' in request.POST:
             parent_id = request.POST.get('parent_id')
             parent_comment = Comment.objects.get(id=parent_id)
-            reply_to = request.POST.get('reply_to')
+            # reply_to = request.POST.get('reply_to')
             post_id = request.POST.get('post_id')
             post = Post.objects.get(id=post_id)
             comment_form = CommentForm(request.POST)
@@ -39,17 +39,25 @@ def feed(request):
                 comment = comment_form.save(commit=False)
                 comment.post = post
                 comment.author = request.user
-                if reply_to:
-                    parent_comment = Comment.objects.get(id=reply_to)
+                if parent_id:
+                    parent_comment = Comment.objects.get(id=parent_id)
                     comment.parent = parent_comment
+                    Notification.objects.create(
+                        to_user = parent_comment.author,
+                        from_user = request.user, 
+                        notification_type = 'comment',
+                        post = post,
+                        comment = comment
+                    )
+                else:
+                    Notification.objects.create(
+                        to_user = post.author,
+                        from_user = request.user, 
+                        notification_type = 'comment',
+                        post = post,
+                        comment = comment
+                    )
                 comment.save()
-                Notification.objects.create(
-                    to_user = parent_comment.author,
-                    from_user = request.user, 
-                    notification_type = 'comment',
-                    post = post,
-                    comment = comment
-                )
                 messages.success(request, "Your comment was added!")
                 return redirect('feed')
             
