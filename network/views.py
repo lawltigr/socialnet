@@ -42,6 +42,8 @@ def feed(request):
                 if parent_id:
                     parent_comment = Comment.objects.get(id=parent_id)
                     comment.parent = parent_comment
+                comment.save()
+                if parent_id:
                     Notification.objects.create(
                         to_user = parent_comment.author,
                         from_user = request.user, 
@@ -57,7 +59,6 @@ def feed(request):
                         post = post,
                         comment = comment
                     )
-                comment.save()
                 messages.success(request, "Your comment was added!")
                 return redirect('feed')
             
