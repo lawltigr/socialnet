@@ -55,6 +55,8 @@
         
     {% endif %}
 
+    <button onclick="toggleTheme()" class="btn btn-sm btn-outline-secondary">Toggle Theme</button>
+
     {% block content %}
     {% endblock %}
 
@@ -64,6 +66,16 @@
             const form = document.getElementById('reply-form-' + commentId);
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
+        function toggleTheme(){
+            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.classList.remove(currentTheme + '-mode');
+            localStorage.setItem('theme', newTheme);
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.add(savedTheme + '-mode');
+        });
     </script>
 </body>
 </html>
